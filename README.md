@@ -3,7 +3,7 @@ LorikeeM
 
 LorikeeM MUMPS Developer Tools for GNU Emacs
 
-This major mode for emacs provides basic syntax highlighting for [M]UMPS.
+This major mode for emacs provides basic syntax highlighting for MUMPS.
 It supports most features of GT.M and InterSystems Cache.
 
 This major mode can also provide a dump of any GT.M global from within the
@@ -35,4 +35,16 @@ Lookup of a specific subscript is planned for a future
 release.
 
 
-INSTALLATION:
+###Installation###
+
+1) Create the directory ~/.emacs.d if it does not already exist.
+
+2) Copy src/lorikeem/lorikeem.el to ~/.emacs.d
+
+3) Add the following to your ~/.emacs file
+
+    (add-to-list 'load-path "~/.emacs.d")
+    (autoload 'mumps-mode "lorikeem" "MUMPS mode" t)
+    (setq auto-mode-alist (append '(("\\.m$" . mumps-mode)) auto-mode-alist))
+
+4) Copy src/mumps/*.m to a directory defined in your $gtmroutines
