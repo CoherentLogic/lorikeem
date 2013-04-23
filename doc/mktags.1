@@ -1,0 +1,121 @@
+.\" Package:       Axiom
+.\" File:          mktags.1
+.\" Summary:       man page for the mktags shell script
+.\" Maintainer:    David Wicksell <dlw@linux.com>
+.\" Last Modified: Oct 20, 2012
+.\"
+.\" Written by David Wicksell <dlw@linux.com>
+.\" Copyright © 2011,2012 Fourth Watch Software, LC
+.\"
+.\" This program is free software: you can redistribute it and/or modify
+.\" it under the terms of the GNU Affero General Public License (AGPL)
+.\" as published by the Free Software Foundation, either version 3 of
+.\" the License, or (at your option) any later version.
+.\"
+.\" This program is distributed in the hope that it will be useful,
+.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+.\" GNU Affero General Public License for more details.
+.\"
+.\" You should have received a copy of the GNU Affero General Public License
+.\" along with this program. If not, see http://www.gnu.org/licenses/.
+.\"
+.\"
+.TH MKTAGS 1 "20 Oct 2012" "Version 0.20.3" "Axiom Developer Tools"
+
+.SH NAME
+\fBmktags\fP - A script to build a tags file for use with the Axiom package
+
+.SH SYNOPSIS
+.B mktags
+.BI "[-elqv] [-d \fIDIRECTORY\fP | \fIFILE\fP]+"
+
+.B mktags
+.BI "[-elqv] -g"
+
+.B mktags
+.BI -h
+
+.SH DESCRIPTION
+.B mktags
+is a shell script that will create a tags file containing MUMPS labels or
+entryrefs for use with the Axiom package.
+.PP
+Normally you would call it via cron once or more daily to keep your tags file
+up to date.
+
+.SH OPTIONS
+The following command line flags are optional. At least -g, or a directory or
+list of directories, with or without, a file or list of files, is required.
+.IP -d
+Supply a directory name after this option, and mktags will recursively search
+it and create a tags file, called MTAGS, in the current working directory.
+You can supply as many -d flags as you want, but can only give each one the
+name of one directory.
+.IP -e
+Run in Emacs mode, building a tags file called MTAGS or ~/.MTAGS in Emacs
+format.
+.IP -h
+Display a helpful usage message and exit.
+.IP -g
+Parse the $gtmroutines environment variable, going through the specified
+directories, building a tags file called ~/.mtags or MTAGS.
+.IP -l
+Turn on logging. Nothing is logged unless this flag is used. It will log to
+the file ~/log/mktags.log. If it is an error message, and not just a notice,
+it will also log to the system log file. E.g.
+
+        /var/log/messages or /var/log/syslog
+.IP -q
+Run in quiet mode. This will ensure that no notice or error messages are ever
+written out to the screen. It works independently of the -l and -v options.
+.IP -v
+Run in verbose mode. This will turn on a very verbose logging of what the tag
+building command, ctags, is doing. It works independently of the -l and -q
+options.
+
+.SH EXAMPLE
+Normally mktags is run from the command line, on each directory listed in the
+$gtmroutines environment variable. E.g.
+
+        $ mktags -g
+
+If you want, you can run it from cron by adding it to your crontab file. Keep
+in mind that you will either need to use the full path to mktags, or you will
+need to define $PATH to include the ~/bin/ directory where mktags is installed,
+in your crontab file. If you are using the -g option, you will need to make
+sure to source the file that builds the $gtmroutines environment variable, in
+your crontab entry, since the -g option requires that it be defined. Running
+mktags from cron could be done to keep your tags file up-to-date. Then it will
+keep up with added, removed, or modified MUMPS routines. Example crontab entry:
+
+        SHELL=/bin/bash
+        PATH=~/bin:/usr/bin:/bin
+        00 20 * * * . set_env && mktags -gl
+.SH EXIT CODES
+0   Success
+
+1   ctags is not installed
+
+2   exuberant-ctags is not installed
+
+3   -g option being used without $gtmroutines being defined
+
+4   Invalid option
+
+5   Not enough arguments supplied
+
+6   mktags is already running
+
+7   Bad error code (Should never happen)
+
+127 User interrupted program execution: E.g. CTRL-C/SIGINT
+
+.SH BUGS
+There are no known bugs.
+
+.SH AUTHOR
+Written by David Wicksell <dlw@linux.com>
+
+.SH SEE ALSO
+ctags(1), ctags-exuberant(1), crontab(5), crontab(1), cron(8)

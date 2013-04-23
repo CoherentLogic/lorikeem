@@ -1,0 +1,99 @@
+.\" Package:       Axiom
+.\" File:          KBAWDUMP.1
+.\" Summary:       man page for the KBAWDUMP M[UMPS]/GT.M routine
+.\" Maintainer:    David Wicksell <dlw@linux.com>
+.\" Last Modified: Oct 21, 2012
+.\"
+.\" Written by David Wicksell <dlw@linux.com>
+.\" Copyright © 2011,2012 Fourth Watch Software, LC
+.\"
+.\" This program is free software: you can redistribute it and/or modify
+.\" it under the terms of the GNU Affero General Public License (AGPL)
+.\" as published by the Free Software Foundation, either version 3 of
+.\" the License, or (at your option) any later version.
+.\"
+.\" This program is distributed in the hope that it will be useful,
+.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+.\" GNU Affero General Public License for more details.
+.\"
+.\" You should have received a copy of the GNU Affero General Public License
+.\" along with this program. If not, see http://www.gnu.org/licenses/.
+.\"
+.\"
+.TH KBAWDUMP 1 "21 Oct 2012" "Version 0.20.3" "Axiom Developer Tools"
+
+.SH NAME
+\fBKBAWDUMP\fP - A M[UMPS]/GT.M routine for use with the Axiom package
+
+.SH SYNOPSIS
+.B mumps -r KBAWDUMP \fPglobal
+
+.B mumps -r KBAWDUMP \fP'global(subscript[,subscript]...)'
+
+.B mumps -r KBAWDUMP \fP'-global(subscript[,subscript]...)'
+
+.B mumps -r GLOBALS^KBAWDUMP
+
+.B mumps -r GLOBALS^KBAWDUMP \fP<first-global>:<last-global>
+
+
+.SH DESCRIPTION
+.B KBAWDUMP
+is a M[UMPS]/GT.M routine that will display the contents of a MUMPS global,
+with or without subscripts.
+.PP
+.B Note
+that if you specify a subscript(s), you must enclose the global reference in
+ticks, or single-quotes ('). This is to ensure that your shell doesn't try to
+start a subshell when it sees the parens.
+.PP
+You are not required to supply the initial ^ of a global reference. You may
+optionally preceed the global reference with a '-'. The default behavior of
+KBAWDUMP is to display all the data of a referenced subscript and all of its
+children. By preceding the global reference with a '-', you can suppress the
+output of the children of the global reference. You may also use the wildcard
+characters '*' and ':'. Using a '*' at a global reference will display all the
+possible data values as well as all the children of that subscript. Using a ':'
+at a global reference will display all the possible data values of that
+subscript, but not its children. You may only use the '*' wildcard as the last
+subscript in the global reference.
+.PP
+.B GLOBALS^KBAWDUMP
+is a M[UMPS]/GT.M routine calling point that will display all of the globals
+in a GT.M database. You may also specify a range in this form:
+.IP
+<first-global>:<last-global>
+.PP
+It will then display every global in a GT.M database starting with
+<first-global> and ending with <last-global>, inclusive.
+.PP
+If you do not supply a global before the colon, it will start at the first
+global in the database. And if you do not supply a global after the colon, it
+will end with the last global in the database.
+.PP
+.B Note
+that you must not have any space between the globals and the colon.
+.PP
+Again, it does not require that you supply the initial ^ of a global reference.
+
+.SH EXAMPLES
+.IP
+$ mumps -r KBAWDUMP DD
+.IP
+$ mumps -r KBAWDUMP 'DD(0,1)'
+.IP
+$ mumps -r GLOBALS^KBAWDUMP
+.IP
+$ mumps -r GLOBALS^KBAWDUMP DI:TMP
+.IP
+$ mumps -r GLOBALS^KBAWDUMP DI:
+.IP
+$ mumps -r GLOBALS^KBAWDUMP :TMP
+
+.SH BUGS
+There are no known bugs, but KBAWDUMP has to deal with MUMPS syntax,
+so there are more than likely always going to be around 3 bugs.
+
+.SH AUTHOR
+Written by David Wicksell <dlw@linux.com>

@@ -94,6 +94,7 @@
 ;; create the thingy that we'll feed to font-lock-defaults
 (setq mumps-font-lock-keywords 
       `(      
+	(,";.*$" . font-lock-comment-face)
 	(,mkua . font-lock-keyword-face)
 	(,mkuf . font-lock-keyword-face)
 	(,mkla . font-lock-keyword-face)
@@ -102,34 +103,7 @@
 	(,mfua . font-lock-function-name-face)
 	(,mfla . font-lock-function-name-face)
 	(,mflf . font-lock-function-name-face)
-	(,";.*$" . font-lock-comment-face)
 ))
-
-;;
-;; get some specifics about the GT.M/FWSLC infrastructure configuration here
-;;
-(defvar lkm-gtm-mupip (getenv "mupip"))
-(defvar lkm-gtm-repl-port (getenv "REPL_PORT"))
-(defvar lkm-gtm-log (getenv "gtm_log"))
-(defvar lkm-gtm-replication (getenv "GTM_REPLICATION"))
-(defvar lkm-gtm-replication-dat (getenv "REPL_DAT"))
-(defvar lkm-gtm-replication-host-ssh-host (getenv "REPL_HOST_SSH_HOST"))
-(defvar lkm-gtm-version (getenv "GTMVER"))
-(defvar lkm-gtm-lke (getenv "lke"))
-(defvar lkm-gtm-global-directory (getenv "gtmgbldir"))
-(defvar lkm-gtm-backup-host (getenv "BUP"))
-(defvar lkm-gtm-replication-journal (getenv "REPL_JNL"))
-(defvar lkm-gtm-replication-side (getenv "REPL_SIDE"))
-(defvar lkm-gtm-routines (getenv "gtmroutines"))
-(defvar lkm-gtm-replication-buffer-size (getenv "REPL_BUFSIZE"))
-(defvar lkm-gtm-database-instance-path (getenv "DBINST"))
-(defvar lkm-gtm-dse (getenv "dse"))
-(defvar lkm-gtm-replication-configuration (getenv "REPL_CONF"))
-(defvar lkm-gtm-gde (getenv "gde"))
-(defvar lkm-gtm-replication-host-ssh-port (getenv "REPL_HOST_SSH_PORT"))
-(defvar lkm-gtm-replication-host (getenv "REPL_HOST"))
-
-(defvar lkm-fwslc (file-exists-p "~/bin/set_env"))
 
 (defun lkm-about ()
   "About LorikeeM"
@@ -269,10 +243,10 @@
     global-map
     [menu-bar mumps-menu gls]
     '("Examine Global at Cursor" . lkm-global-at-point))
-;;  (define-key
-;;   global-map
-;;    [menu-bar mumps-menu jmp]
-;;    '("Jump to Routine Definition" . lkm-jump-to-routine-def))
+  (define-key
+   global-map
+    [menu-bar mumps-menu jmp]
+    '("Jump to Routine Definition" . lkm-jump-to-routine-def))
   (define-key
     global-map
     [menu-bar mumps-menu cmp]
