@@ -1,0 +1,17 @@
+LorikeeM M Developer Tools Version 0.99
+Copyright (C) 2011 Coherent Logic Development LLC
+
+INSTALLING CENTOS 5 PREREQUISITES FOR LORIKEEM 0.99
+
+This archive contains two RPM packages for Emacs 23.2.1.
+In order to install these archives, become root, and
+execute the following commands:
+
+# rpm -ivh emacs23-common-23.2-5.i386.rpm
+# rpm -ivh emacs23-23.2-5.i386.rpm
+
+PLEASE NOTE:
+These packages are built only for the i386 (32-bit)
+platform. We have not yet released packages for Intel-64
+platforms.
+
