@@ -15,12 +15,19 @@
 ;;
 ;; Copyright (C) 2010, 2012 Coherent Logic Development LLC
 ;;
-;; This product is provided under the Logical Public License v1.0.
-;; The license should be included with the distribution as a file
-;; named "COPYING", in the root directory of the distribution archive.
+;; This program is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU Affero General Public License (AGPL)
+;; as published by the Free Software Foundation, either version 3 of
+;; the License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+;; GNU Affero General Public License for more details.
+;;
+;; You should have received a copy of the GNU Affero General Public License
+;; along with this program. If not, see http://www.gnu.org/licenses/.
 ;; 
-;; If you did not receive a copy of this license, please see
-;; http://www.coherent-logic.com/licenses/lpl.html
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -102,7 +109,7 @@
 	(,mfuf . font-lock-function-name-face)
 	(,mfua . font-lock-function-name-face)
 	(,mfla . font-lock-function-name-face)
-	(,mflf . font-lock-function-name-face)
+	(,mflf . font-lock-function-name-face)	
 ))
 
 (defun lkm-about ()
@@ -113,12 +120,7 @@
   (get-buffer-create lkm-about-buf)
   (with-current-buffer (get-buffer-create lkm-about-buf)
     (goto-char (point-max))
-    (insert "LorikeeM MUMPS Developer Tools\n\n")
-    (insert "GT.M Version                     :  " lkm-gtm-version "\n")
-    (insert "GT.M Database Instance Path      :  " lkm-gtm-database-instance-path "\n")
-    (insert "GT.M Global Directory Path       :  " lkm-gtm-global-directory "\n")
-    (insert "GT.M Routine Search Path         :  " lkm-gtm-routines "\n")    
-    (insert "GT.M Replication Status          :  " lkm-gtm-replication "," (downcase lkm-gtm-replication-side) "\n"))
+    (insert "LorikeeM MUMPS Developer Tools\n\n"))
   (switch-to-buffer-other-window lkm-about-buf))
 
 (defun lkm-gtm-compile ()
@@ -200,8 +202,8 @@
   "mumps mode"
   "Major mode for MUMPS"
 
-  (setq lkm-version "0.99.1")
-  (message "LorikeeM MUMPS Developer Tools %s (GT.M %s)" lkm-version lkm-gtm-version)
+  (setq lkm-version "0.99.3")
+  (message "LorikeeM Developer Tools %s" lkm-version)
 
   ;;
   ;; set up syntax table entries
