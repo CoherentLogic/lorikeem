@@ -170,6 +170,25 @@
   (setq lkm-current-symb (thing-at-point 'symbol))
   (find-tag-other-window lkm-current-symb))
 
+(defun yas/insert-by-name (name)
+  (flet ((dummy-prompt
+          (prompt choices &optional display-fn)
+          (declare (ignore prompt))
+          (or (find name choices :key display-fn :test #'string=)
+              (throw 'notfound nil))))
+    (let ((yas/prompt-functions '(dummy-prompt)))
+      (catch 'notfound
+        (yas/insert-snippet t)))))
+
+(defun lkm-routine-template ()
+  "Get the template of the routine under the cursor."
+  (interactive)
+  (setq lkm-current-symb (thing-at-point 'symbol))
+  (message "Current symbol: %s" lkm-current-symb)
+  (insert "()")
+  (backward-char 1)
+  (yas/insert-by-name lkm-current-symb))
+
 (defun lkm-complete-symbol ()
   "Perform keyword completion on word before cursor."
   (interactive)
@@ -228,6 +247,7 @@
   (global-set-key (kbd "<f8>") 'lkm-jump-to-routine-def)
   (global-set-key (kbd "<f5>") 'lkm-complete-symbol)
   (global-set-key (kbd "<f9>") 'lkm-gtm-compile)
+  (global-set-key (kbd "(") 'lkm-routine-template)
 
   ;;
   ;; set up the MUMPS menu to be loaded after the Tools menu
