@@ -1,0 +1,1 @@
+${1:FILE},${2:IENS},${3:FIELD},"${4:FLAGS$(yas/choose-value '("?" "??" "A" "B" "C" "D" "F" "G" "H" "M" "P" "S" "T" "U" "V" "X"))}",${5:MSG_ROOT}

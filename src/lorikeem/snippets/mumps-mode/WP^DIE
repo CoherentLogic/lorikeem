@@ -1,0 +1,1 @@
+${1:FILE},${2:IENS},${3:FIELD},"${4:FLAGS$(yas/choose-value '("A" "K" "AK"))}",${5:WP_ROOT},${6:MSG_ROOT}

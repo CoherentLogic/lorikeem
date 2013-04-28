@@ -1,0 +1,1 @@
+${1:DIALOG NUMBER},.${2:TEXT_PARAM},.${3:OUTPUT_PARAM},${4:OUTPUT_ARRAY},"${5:FLAGS$(yas/choose-value '("S" "F" "SF"))}"
