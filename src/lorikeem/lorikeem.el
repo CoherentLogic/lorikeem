@@ -146,8 +146,7 @@
       (if (string= prev-char "^") 
 	(lkm-gtm-global-lookup mm-current-word) 
 	(message "%s does not appear to be a MUMPS global." mm-current-word))
-      )
-    
+      )    
   )
 )
 
@@ -183,11 +182,16 @@
 (defun lkm-routine-template ()
   "Get the template of the routine under the cursor."
   (interactive)
-  (setq lkm-current-symb (thing-at-point 'symbol))
-  (message "Current symbol: %s" lkm-current-symb)
+  (setq lkm-current-symb (thing-at-point 'symbol))  
   (insert "()")
   (backward-char 1)
   (yas/insert-by-name lkm-current-symb))
+
+(defun lkm-sac-header () 
+  "Insert the standard VistA SAC header"
+  (interactive)
+  (goto-char (point-min))
+  (yas/insert-by-name "SACHEADER"))
 
 (defun lkm-complete-symbol ()
   "Perform keyword completion on word before cursor."
@@ -219,10 +223,12 @@
 
 (define-derived-mode mumps-mode fundamental-mode
   "mumps mode"
-  "Major mode for MUMPS"
+  "LorikeeM MUMPS Developer Tools"
 
   (setq lkm-version "0.99.3")
-  (message "LorikeeM Developer Tools %s" lkm-version)
+  (message "LorikeeM MUMPS Developer Tools %s" lkm-version)
+
+  (setq frame-title-format "LorikeeM MUMPS Developer Tools")
 
   ;;
   ;; set up syntax table entries
@@ -266,6 +272,10 @@
     [menu-bar mumps-menu gls]
     '("Examine Global at Cursor" . lkm-global-at-point))
   (define-key
+    global-map
+    [menu-bar mumps-menu sachdr]
+    '("Insert VistA SAC Header" . lkm-sac-header))
+  (define-key
    global-map
     [menu-bar mumps-menu jmp]
     '("Jump to Routine Definition" . lkm-jump-to-routine-def))
@@ -292,8 +302,8 @@
   (setq mfuf nil)
   (setq mfla nil)
   (setq mflf nil)
-  (setq mo nil)
+  (setq mo nil) 
 
-  (setq mode-name "LorikeeM")
+  (setq mode-name "LorikeeM MUMPS Developer Tools")
   (run-hooks 'mumps-mode-hook)
 )

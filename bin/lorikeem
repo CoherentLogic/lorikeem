@@ -1,0 +1,21 @@
+#!/bin/bash
+
+export LORIKEEM_VERSION="0.99.3"
+echo "                                        "
+echo "                                        "
+echo "                                        "
+echo " _               _ _             __  __ "
+echo "| |    ___  _ __(_) | _____  ___|  \/  |"
+echo "| |   / _ \| '__| | |/ / _ \/ _ \ |\/| |"
+echo "| |__| (_) | |  | |   <  __/  __/ |  | |"
+echo "|_____\___/|_|  |_|_|\_\___|\___|_|  |_|"
+echo "                                        "
+echo "     LorikeeM MUMPS Developer Tools     "
+echo "            Version ${LORIKEEM_VERSION} "
+echo "                                        "
+echo "          Copyright (C) 2013            "
+echo "    Coherent Logic Development LLC      "
+echo "                                        "
+echo "                                        "
+echo "                                        "
+emacs -T "LorikeeM MUMPS Developer Tools" -rv -mm -l "/opt/lorikeem/lorikeem.el" -f mumps-mode $1
