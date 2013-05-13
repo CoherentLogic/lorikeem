@@ -216,6 +216,31 @@ function update_emacs_config
     cat src/lorikeem/lorikeem-dotemacs.el >> ${HOME}/.emacs
 }
 
+function copy_binaries
+{
+    whiptail --title "${installer_caption}" \
+	     --infobox "Installing binaries..." 12 75
+   
+    cp bin/* ${HOME}/bin
+}
+
+function update_search_path
+{
+    whiptail --title "${installer_caption}" \
+	     --infobox "Updating search path..." 12 75
+
+    cat src/lorikeem/lorikeem-path.sh >> ${HOME}/.bashrc
+}
+
+function done_message 
+{
+    installer_text="LorikeeM has been successfully installed.\n\n"
+    installer_text="${installer_text}You may start LorikeeM by typing\n\nlorikeem [filespec]\n\n"
+    installer_text="${installer_text}at the shell prompt."
+    whiptail --title "${installer_caption}" \
+	     --msgbox "${installer_text}" 15 75
+}
+
 check_for_whiptail
 check_distro
 welcome_message
@@ -225,3 +250,6 @@ check_create_directories
 update_emacs_config
 copy_lorikeem_elisp
 copy_yasnippet
+copy_binaries
+update_search_path
+done_message
