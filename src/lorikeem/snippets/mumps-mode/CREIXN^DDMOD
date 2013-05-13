@@ -1,1 +1,0 @@
-.${1:XREF},"${2:FLAGS$(yas/choose-value '("S" "W" "SW"))}",${3:.RESULT},"${4:OUTPUT_ROOT}","${5:MSG_ROOT}"

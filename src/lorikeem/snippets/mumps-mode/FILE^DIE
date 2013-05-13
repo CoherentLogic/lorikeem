@@ -1,1 +1,0 @@
-${1:FLAGS$(yas/choose-value '("E" "K" "S" "T" "U"))},${2:FDA_ROOT},${3:MSG_ROOT}

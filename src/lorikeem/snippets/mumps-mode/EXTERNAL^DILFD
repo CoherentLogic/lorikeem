@@ -1,1 +1,0 @@
-${1:FILE},${2:FIELD},"${3:FLAGS$(yas/choose-value '("F" "L" "U"))}",${4:INTERNAL},${5:MSG_ROOT}

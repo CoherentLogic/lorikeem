@@ -1,1 +1,0 @@
-${1:FILE},${2:FIELD},${3:CROSS_REF},"${4:FLAGS$(yas/choose-value '("K" "W"))}",${5:OUTPUT_ROOT},${6:MSG_ROOT}

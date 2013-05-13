@@ -1,1 +1,0 @@
-${1:FILE},${2:INDEX},"${3:FLAGS$(yas/choose-value '("K" "W"))}",${4:OUTPUT_ROOT},${5:MSG_ROOT}
