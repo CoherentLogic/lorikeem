@@ -232,6 +232,25 @@ function update_search_path
     cat src/lorikeem/lorikeem-path.sh >> ${HOME}/.bashrc
 }
 
+function install_crontab
+{
+    whiptail --title "${installer_caption}" \
+             --infobox "Setting up scheduled tasks..." 12 75
+
+    crontab -l > tmp_cron
+    echo "0 * * * * mktags -e -g" >> tmp_cron
+    crontab tmp_cron
+    rm tmp_cron
+}
+
+function build_tags
+{
+    whiptail --title "${installer_caption}" \
+             --infobox "Building ${HOME}/.MTAGS for routine cross-referencing..." 12 75
+
+    ${HOME}/bin/mktags -e -g
+}
+
 function done_message 
 {
     installer_text="LorikeeM has been successfully installed.\n\n"
@@ -252,4 +271,6 @@ copy_lorikeem_elisp
 copy_yasnippet
 copy_binaries
 update_search_path
+install_crontab
+build_tags
 done_message
