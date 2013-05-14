@@ -1,0 +1,203 @@
+.\" Package:       LorikeeM MUMPS Developer Tools
+.\" File:          lorikeem.1
+.\" Summary:       man page for LorikeeM
+.\" Maintainer:    John Willis <jwillis@coherent-logic.com>
+.\" Last Modified: 13 May 2013
+.\"
+.\" Written by John Willis <jwillis@coherent-logic.com>
+.\" Copyright © 2013 Coherent Logic Development LLC
+.\"
+.\" This program is free software: you can redistribute it and/or modify
+.\" it under the terms of the GNU Affero General Public License (AGPL)
+.\" as published by the Free Software Foundation, either version 3 of
+.\" the License, or (at your option) any later version.
+.\"
+.\" This program is distributed in the hope that it will be useful,
+.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+.\" GNU Affero General Public License for more details.
+.\"
+.\" You should have received a copy of the GNU Affero General Public License
+.\" along with this program. If not, see http://www.gnu.org/licenses/.
+.\"
+.\"
+.TH LORIKEEM 1 "13 May 2013" "Version 0.99.3" "LorikeeM MUMPS Developer Tools"
+
+.SH NAME
+\fBlorikeem\fP - MUMPS programmer's editor
+
+.SH SYNOPSIS
+.B lorikeem
+.BI "[\fIFILE\fP]"
+
+.SH DESCRIPTION
+
+.B LorikeeM
+is a GNU Emacs major mode and auxiliary utilities which turn the GNU Emacs 
+environment into a MUMPS programmer's editor.
+
+.SH EXAMPLE
+
+LorikeeM is typically run from the command line, specifying the name of the 
+routine to edit, as follows:
+
+        $ lorikeem ROUTINE.m
+
+This will open ROUTINE.m in GNU Emacs with the LorikeeM major mode enabled.
+
+.SH GLOBAL LOOKUP
+
+LorikeeM provides a facility for viewing the value of any MUMPS global from
+within the editor. For this to work, the KBAWDUMP.m routine (packaged with
+the LorikeeM distribution) must be placed in a location where it can be 
+accessed by your environment.
+
+To use global lookup, position the cursor over the global you wish to
+examine, and perform one of the following actions:
+
+* Press the
+.B F6
+key on your keyboard
+
+* Type
+.B M-x lkm-global-at-point
+
+* Select
+.B Examine Global at Cursor
+from the LorikeeM menu
+
+To examine a global that is not in the current buffer, perform one of the
+following actions:
+
+* Press
+.B F7
+on your keyboard
+
+* Type 
+.B M-x lkm-gtm-global-lookup
+
+* Select
+.B Examine Global
+from the LorikeeM menu
+
+.B NOTE:
+The global lookup feature essentially performs a ZWRITE on the selected
+or typed global. This can be a huge time and memory drain, especially
+for very large globals, as found in e.g. VistA.
+
+Lookup of a single, specific subscript is planned for a future release.
+
+.SH ROUTINE LOOKUP
+
+This facility allows you to jump from a routine reference to its definition
+using a tagfile created by Exuberant CTAGS.
+
+To look up a routine, position your cursor over the routine's entryref, and
+do one of the following:
+
+* Select
+.B Jump to Routine Defintion
+from the LorikeeM menu
+
+* Press the
+.B F8 
+key on your keyboard
+
+The script
+.B mktags
+, located in the
+.B bin
+subdirectory of your home directory, allows you to create a tagfile in the
+unique format required by GNU Emacs.
+
+To create the tagfile for all the source directories refernced in your
+.B $gtmroutines
+environment variable, run
+.B mktags -eg
+from your ~/bin directory. You will need to run this script each time you
+make a change to your MUMPS routines.
+
+For more advanced usage of
+.B mktags
+, refer to
+.B mktags(1)
+ 
+.SH SYMBOL COMPLETION
+
+LorikeeM provides symbol and keyword completion. To use it, position your
+cursor over the incomplete keyword and press the
+.B F5
+key or type
+.B M-x lkm-complete-symbol
+
+LorikeeM will expand the short form of the MUMPS command at the cursor position
+to its long form, complete the intrinsic function's name at the cursor position,
+or provide you with a list of possible completions from which you can select
+the desired command or intrinsic function.
+
+.SH ROUTINE COMPILATION
+
+LorikeeM allows you to compile the currently-loaded routine. To do this, perform
+one of the following actions:
+
+* Press the 
+.B F9
+key on your keyboard
+
+* Select 
+.B Compile Current Buffer
+from the LorikeeM menu
+
+.SH API TEMPLATES
+
+LorikeeM integrates YASnippet functionality to provide "IntelliSense"-style parameter
+completion for all of the MUMPS 1995 intrinsic functions and part of the VistA API.
+
+API templates are triggered by typing the opening paren of the function's actuallist.
+Pressing the
+.B TAB
+or
+.B SHIFT-TAB
+keys will navigate forward and reverse, respectively, through the parameters, highlighting the
+parameter names so they will be replaced when you begin typing. Some parameters will prompt
+you with a menu of options from which you can choose.
+
+.B NOTE:
+Current VistA API support is limited to the Fileman Database Server (DBS) API.
+
+The files supporting these APIs are located at 
+.B ~/.emacs.d/plugins/yasnippet/snippets/mumps-mode
+
+.SH BUGS
+
+* Syntax coloring for comments sometimes breaks when the comment includes MUMPS commands or intrinsic functions
+
+* Most of the functionality of 
+.B KBAWDUMP(1) 
+is not exposed by LorikeeM
+
+* The API templates provided only support the uppercase versions of intrinsic functions.
+
+* LorikeeM only supports FIS GT.M currently. Support for InterSystems Cache', MUMPSV1, and FreeM is
+planned for the 1.0 release.
+
+Before a 1.0 release will be considered, the above bugs must be fixed.
+
+.SH AUTHOR
+
+Written by John Willis <jwillis@coherent-logic.com>
+
+Inspired by David Wicksell's 
+.B AxioM Developer Tools 
+, which provides similar functionality for Bram Moolenar's
+.B vim
+editor.
+
+Includes functionality from the
+.B YASnippet
+templating library for Emacs
+
+Also inspired by John May's mumps-mode as found at http://www.mombu.com/programming/mumps/t-emacs-mumps-mode-3143202.html
+
+.SH SEE ALSO
+axiom(1), emacs(1), GNU Emacs texinfo documentation, http://www.coherent-logic.com/lorikeem
