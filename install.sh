@@ -103,6 +103,10 @@ function check_create_directories
 	mkdir ${HOME}/bin
     fi
 
+    if [ ! -d "${HOME}/man/man1" ]; then
+	mkdir -p ${HOME}/man/man1
+    fi
+
     if [ ! -f "${HOME}/.emacs" ]; then
 	touch ${HOME}/.emacs
     fi
@@ -208,6 +212,29 @@ function copy_mumps_routines
     cp src/mumps/*.m ${CHOSEN_ROUTINE_PATH} 
 }
 
+function copy_manpages
+{
+    whiptail --title "${installer_caption}" \
+	     --infobox "Installing documentation..." 12 75
+
+    cp -p doc/mktags.1 doc/lorikeem.1 doc/KBAWDUMP.1 ${HOME}/man/man1/
+    gzip -f9 ${HOME}/man/man1/{mktags,KBAWDUMP,lorikeem}.1
+
+    if [ "${OS}" == "Ubuntu" -o "${OS}" == "LinuxMint" ]; then
+	export MANPATH=:~/man
+	mandb -q
+    else
+	if grep -q MANPATH ~/.bashrc
+	then
+	    # do nothing
+	    echo "do nothing" > /dev/null
+	else
+	    echo >> ~/.bashrc
+	    echo "export MANPATH=\$HOME/man:`manpath`" >> ~/.bashrc
+	fi
+    fi    
+}
+
 function update_emacs_config
 {
     whiptail --title "${installer_caption}" \
@@ -266,6 +293,7 @@ welcome_message
 check_for_emacs
 copy_mumps_routines
 check_create_directories
+copy_manpages
 update_emacs_config
 copy_lorikeem_elisp
 copy_yasnippet

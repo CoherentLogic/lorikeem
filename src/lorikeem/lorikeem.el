@@ -187,6 +187,12 @@
   (backward-char 1)
   (yas/insert-by-name lkm-current-symb))
 
+(defun lkm-expand-quote ()
+  "Set up a string literal."
+  (interactive)
+  (insert "\"\"")
+  (backward-char 1))
+
 (defun lkm-sac-header () 
   "Insert the standard VistA SAC header"
   (interactive)
@@ -225,7 +231,7 @@
   "mumps mode"
   "LorikeeM MUMPS Developer Tools"
 
-  (setq lkm-version "0.99.3")
+  (setq lkm-version "0.99.4")
   (message "LorikeeM MUMPS Developer Tools %s" lkm-version)
 
   (setq frame-title-format "LorikeeM MUMPS Developer Tools")
@@ -254,6 +260,7 @@
   (global-set-key (kbd "<f5>") 'lkm-complete-symbol)
   (global-set-key (kbd "<f9>") 'lkm-gtm-compile)
   (global-set-key (kbd "(") 'lkm-routine-template)
+  (global-set-key (kbd "\"") 'lkm-expand-quote)
 
   ;;
   ;; set up the MUMPS menu to be loaded after the Tools menu
