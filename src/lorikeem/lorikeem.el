@@ -85,8 +85,6 @@
 (defvar mfua (regexp-opt mumps-functions-ucase-abbrev 'words))
 (defvar mfla (regexp-opt mumps-functions-lcase-abbrev 'words))
 
-
-
 ;; clear un-needed memory resources
 (setq mumps-keywords-ucase-abbrev nil)
 (setq mumps-keywords-ucase-full nil)
@@ -267,33 +265,52 @@
   ;;
   (define-key-after
     global-map
-    [menu-bar mumps-menu]
-    (cons "LorikeeM" (make-sparse-keymap "mumps"))
+    [menu-bar vista-menu]
+    (cons "VistA" (make-sparse-keymap "vista"))
     'tools )
+
+  (define-key-after
+    global-map
+    [menu-bar globals-menu]
+    (cons "Globals" (make-sparse-keymap "globals"))
+    'tools )
+
+  (define-key-after
+    global-map
+    [menu-bar routines-menu]
+    (cons "Routines" (make-sparse-keymap "routines"))
+    'tools )  
+
+  (define-key-after
+    global-map
+    [menu-bar mumps-menu]
+    (cons "MUMPS" (make-sparse-keymap "mumps"))
+    'tools )
+
+    
+
   (define-key
     global-map
-    [menu-bar mumps-menu gli]
-    '("Examine Global" . lkm-gtm-global-lookup))
+    [menu-bar globals-menu gli]
+    '("Examine" . lkm-gtm-global-lookup))
   (define-key
     global-map
-    [menu-bar mumps-menu gls]
-    '("Examine Global at Cursor" . lkm-global-at-point))
+    [menu-bar globals-menu gls]
+    '("Examine at Cursor" . lkm-global-at-point))
+
   (define-key
     global-map
-    [menu-bar mumps-menu sachdr]
+    [menu-bar vista-menu sachdr]
     '("Insert VistA SAC Header" . lkm-sac-header))
+
   (define-key
    global-map
-    [menu-bar mumps-menu jmp]
-    '("Jump to Routine Definition" . lkm-jump-to-routine-def))
+    [menu-bar routines-menu jmp]
+    '("Find Routine" . lkm-jump-to-routine-def))
   (define-key
     global-map
     [menu-bar mumps-menu cmp]
     '("Complete Keyword at Cursor" . lkm-complete-symbol))
-  (define-key
-    global-map
-    [menu-bar mumps-menu abt]
-    '("About LorikeeM" . lkm-about))
   (define-key
     global-map
     [menu-bar mumps-menu com]
