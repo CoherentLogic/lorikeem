@@ -76,6 +76,10 @@
   "MUMPS keywords for completion")
 
 ;; build the regexps from the lists
+(setq mumps-line-label "^[%A-Za-z][A-Za-z0-9]*:?\\|^[0-9]+:?")
+(setq mumps-string-error "\\\\\".*")
+(setq mumps-unmatched-open-paren "\(.*")
+(setq mumps-unmatched-close-paren "\).*")
 (defvar mkuf (regexp-opt mumps-keywords-ucase-full 'words))
 (defvar mklf (regexp-opt mumps-keywords-lcase-full 'words))
 (defvar mkua (regexp-opt mumps-keywords-ucase-abbrev 'words))
@@ -95,11 +99,12 @@
 (setq mumps-functions-ucase-abbrev nil)
 (setq mumps-functions-lcase-abbrev nil)
 
+(setq font-lock-warning-face "red2")
 
 ;; create the thingy that we'll feed to font-lock-defaults
 (setq mumps-font-lock-keywords 
       `(      
-	(,";.*$" . font-lock-comment-face)
+	(,";.*$" . font-lock-comment-face)       
 	(,mkua . font-lock-keyword-face)
 	(,mkuf . font-lock-keyword-face)
 	(,mkla . font-lock-keyword-face)
@@ -108,6 +113,8 @@
 	(,mfua . font-lock-function-name-face)
 	(,mfla . font-lock-function-name-face)
 	(,mflf . font-lock-function-name-face)	
+	(,mumps-line-label . font-lock-type-face)
+	(,mumps-string-error . font-lock-warning-face)
 ))
 
 (defun lkm-about ()
@@ -147,6 +154,63 @@
       )    
   )
 )
+
+(defun lkm-is-line-label ()
+  "Returns t if the current line is a label"
+  (setq current-line (thing-at-point 'line))
+  (string-match "^[%A-Za-z][A-Za-z0-9]*:?\\|^[0-9]+:?" current-line))
+
+(defun lkm-validate-line-label ()
+  "Tells you whether or not the current line contains a valid line label"
+  (interactive)
+  (if (lkm-is-line-label)
+      (message "This is a line label"))
+  (if (not (lkm-is-line-label)) 
+      (message "This is not a line label")))
+
+(defun lkm-parent-label-distance ()
+  "Returns the distance from the parent label in number of lines"
+  (setq lkm-distance 0)
+  (save-excursion
+    (while (not (lkm-is-line-label))
+      (forward-line -1)
+      (incf lkm-distance)))  
+  (setq lkm-distance lkm-distance))
+
+(defun lkm-print-parent-label-distance ()
+  "Print the distance from the parent label"
+  (interactive)
+  (message "The distance from the parent label is %d lines" (lkm-parent-label-distance)))
+
+(defun lkm-parent-label-name ()
+  "Returns the name of the parent label"
+  (save-excursion
+    (forward-line (- (lkm-parent-label-distance)))
+    (setq label-line (thing-at-point 'line)))
+  (string-match "^[%A-Za-z][A-Za-z0-9]*:?\\|^[0-9]+:?" label-line)
+  (setq label-line (substring label-line 0 (match-end 0))))
+
+(defun lkm-print-parent-label-name ()
+  "Print the parent label name"
+  (interactive)
+  (message "The parent label is '%s'" (lkm-parent-label-name)))
+
+(defun lkm-current-label-offset-routine ()
+  "Get the current label+offset^routine"
+  (setq pl-label (lkm-parent-label-name))
+  (setq pl-offset (lkm-parent-label-distance))
+  (string-match "^[[:alnum:]]+" (buffer-name))
+  (setq pl-routine (substring (buffer-name) 0 (match-end 0)))
+  (if (not (= pl-offset 0))
+      (setq pl-result (format "%s+%d^%s" pl-label pl-offset pl-routine)))
+  (if (= pl-offset 0)
+      (setq pl-result (format "%s^%s" pl-label pl-routine)))
+  (setq pl-result pl-result))
+
+(defun lkm-print-current-label-offset-routine ()
+  "Print the current label+offset^routine"
+  (interactive)
+  (message (lkm-current-label-offset-routine)))
 
 (defun lkm-gtm-global-lookup (global)
   "Look up a global in GT.M"
@@ -229,10 +293,47 @@
   "mumps mode"
   "LorikeeM MUMPS Developer Tools"
 
-  (setq lkm-version "0.99.4")
+  (setq lkm-version "0.99.5")
   (message "LorikeeM MUMPS Developer Tools %s" lkm-version)
 
   (setq frame-title-format "LorikeeM MUMPS Developer Tools")
+
+  (setq mode-line-format
+	(list
+	 "   "	 
+	 '(:eval (propertize (lkm-current-label-offset-routine) 'face 'font-lock-string-face
+			     'help-echo "Help"))
+	 "   "
+
+	 ;; relative position, size of file
+	 "["
+	 (propertize "%p" 'face 'font-lock-constant-face) ;; % above top
+	 "/"
+	 (propertize "%I" 'face 'font-lock-constant-face) ;; size
+	 "] ["
+	 (propertize "Line %l Col %c" 'face 'font-lock-constant-face)
+	 "] "	 
+
+	 "[" ;; insert vs overwrite mode, input-method in a tooltip
+	 '(:eval (propertize (if overwrite-mode "Ovr" "Ins")
+			     'face 'font-lock-preprocessor-face
+			     'help-echo (concat "Buffer is in "
+						(if overwrite-mode "overwrite" "insert") " mode")))
+
+	 ;; was this buffer modified since the last save?
+	 '(:eval (when (buffer-modified-p)
+		   (concat ","  (propertize "Mod"
+					    'face 'font-lock-warning-face
+					    'help-echo "Buffer has been modified"))))
+
+	 ;; is this buffer read-only?
+	 '(:eval (when buffer-read-only
+		   (concat ","  (propertize "RO"
+					    'face 'font-lock-type-face
+					    'help-echo "Buffer is read-only"))))  
+	 "] "
+
+	 ))
 
   ;;
   ;; set up syntax table entries
@@ -243,6 +344,20 @@
   (modify-syntax-entry ?^ "_")
   (modify-syntax-entry ?% "_")
   (modify-syntax-entry ?$ "-")
+  (modify-syntax-entry ?\; "<")
+  (modify-syntax-entry ?\n ">")
+  (modify-syntax-entry ?+ ".")
+  (modify-syntax-entry ?- ".")
+  (modify-syntax-entry ?_ ".")
+  (modify-syntax-entry ?[ ".")
+  (modify-syntax-entry ?* ".")
+  (modify-syntax-entry ?/ ".")
+  (modify-syntax-entry ?\\ ".")
+  (modify-syntax-entry ?# ".")
+  (modify-syntax-entry ?< ".")
+  (modify-syntax-entry ?> ".")
+  (modify-syntax-entry ?& ".")
+  (modify-syntax-entry ?? ".")
 
   ;;
   ;; modify the tags table list to point to our directory
@@ -261,7 +376,7 @@
   (global-set-key (kbd "\"") 'lkm-expand-quote)
 
   ;;
-  ;; set up the MUMPS menu to be loaded after the Tools menu
+  ;; set up the LorikeeM menus to be loaded after the Tools menu
   ;;
   (define-key-after
     global-map
@@ -286,9 +401,7 @@
     [menu-bar mumps-menu]
     (cons "MUMPS" (make-sparse-keymap "mumps"))
     'tools )
-
     
-
   (define-key
     global-map
     [menu-bar globals-menu gli]
