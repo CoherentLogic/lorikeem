@@ -199,7 +199,7 @@
   "Get the current label+offset^routine"
   (setq pl-label (lkm-parent-label-name))
   (setq pl-offset (lkm-parent-label-distance))
-  (string-match "^[[:alnum:]]+" (buffer-name))
+  (string-match "^[[:alnum:]][_A-Za-z0-9]+" (buffer-name))
   (setq pl-routine (substring (buffer-name) 0 (match-end 0)))
   (if (not (= pl-offset 0))
       (setq pl-result (format "%s+%d^%s" pl-label pl-offset pl-routine)))
