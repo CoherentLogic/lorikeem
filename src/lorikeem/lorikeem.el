@@ -77,9 +77,9 @@
 
 ;; build the regexps from the lists
 (setq mumps-line-label "^[%A-Za-z][A-Za-z0-9]*:?\\|^[0-9]+:?")
-(setq mumps-string-error "\\\\\".*")
-(setq mumps-unmatched-open-paren "\(.*")
-(setq mumps-unmatched-close-paren "\).*")
+(setq mumps-string-error "\\\\\".*$")
+(setq mumps-unmatched-open-paren "\(.*$")
+(setq mumps-unmatched-close-paren "\).*$")
 (defvar mkuf (regexp-opt mumps-keywords-ucase-full 'words))
 (defvar mklf (regexp-opt mumps-keywords-lcase-full 'words))
 (defvar mkua (regexp-opt mumps-keywords-ucase-abbrev 'words))
@@ -156,7 +156,7 @@
 )
 
 (defun lkm-is-line-label ()
-  "Returns t if the current line is a label"
+  "Returns t if the current line is a label" 
   (setq current-line (thing-at-point 'line))
   (string-match "^[%A-Za-z][A-Za-z0-9]*:?\\|^[0-9]+:?" current-line))
 
@@ -172,9 +172,12 @@
   "Returns the distance from the parent label in number of lines"
   (setq lkm-distance 0)
   (save-excursion
+    (catch 'top-of-file
     (while (not (lkm-is-line-label))
+      (if (= (line-number-at-pos) 1)
+	  (throw 'top-of-file lkm-distance))
       (forward-line -1)
-      (incf lkm-distance)))  
+      (incf lkm-distance))))
   (setq lkm-distance lkm-distance))
 
 (defun lkm-print-parent-label-distance ()
@@ -199,7 +202,7 @@
   "Get the current label+offset^routine"
   (setq pl-label (lkm-parent-label-name))
   (setq pl-offset (lkm-parent-label-distance))
-  (string-match "^[[:alnum:]][_A-Za-z0-9]+" (buffer-name))
+  (string-match "^[[:alnum:]]+" (buffer-name))
   (setq pl-routine (substring (buffer-name) 0 (match-end 0)))
   (if (not (= pl-offset 0))
       (setq pl-result (format "%s+%d^%s" pl-label pl-offset pl-routine)))
@@ -297,6 +300,14 @@
   (message "LorikeeM MUMPS Developer Tools %s" lkm-version)
 
   (setq frame-title-format "LorikeeM MUMPS Developer Tools")
+
+  (set-variable 
+   'imenu-generic-expression 
+   (list
+    (list
+     nil 
+     "\\(^[%A-Za-z][A-Za-z0-9]*\\):?\\|^[0-9]+:?" 1)))
+  (imenu-add-to-menubar "Labels")
 
   (setq mode-line-format
 	(list

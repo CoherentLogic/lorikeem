@@ -1,20 +1,18 @@
-;
-; KBBMLRKM.m
-;  LorikeeM global dump support routines.
-;
-; Copyright (C) 2012 Coherent Logic Development LLC
-;
-; Distributed under the terms of the Logical Public License v1.0.
-; This license should have been included with this distribution
-; in a file named COPYING.
-;
-KBBMLRKM
-	new cmdLine
-	set cmdLine=$zcmd
-	do globalDump(cmdLine)
-	quit
+KBBMLRKM ; LorikeeM runtime library
+ n cmdLine,oper,param
+ s cmdLine=$zcmd
+ s oper=$P(cmdLine,"~",1)
+ s param=$P(cmdLine,"~",2)
+ i oper="EXTRINSIC" d extrinsic(param)
+ i oper="ROUTINE" d routine(param)
+ q
 
-globalDump(globalName)
-	set globalName="^"_globalName
-	zwrite @globalName
-	quit 
+extrinsic(parm)
+ n execStr s execStr="W $$"_parm_",!"
+ x execStr
+ q
+
+routine(parm)
+ n execStr s execStr="D "_parm
+ x execStr
+ q
