@@ -198,12 +198,16 @@
   (interactive)
   (message "The parent label is '%s'" (lkm-parent-label-name)))
 
+(defun lkm-current-routine ()
+  "Get the current routine"
+  (string-match "^[[:alnum:]]+" (buffer-name))
+  (setq pl-routine (substring (buffer-name) 0 (match-end 0))))
+
 (defun lkm-current-label-offset-routine ()
   "Get the current label+offset^routine"
   (setq pl-label (lkm-parent-label-name))
   (setq pl-offset (lkm-parent-label-distance))
-  (string-match "^[[:alnum:]]+" (buffer-name))
-  (setq pl-routine (substring (buffer-name) 0 (match-end 0)))
+  (setq pl-routine (lkm-current-routine))
   (if (not (= pl-offset 0))
       (setq pl-result (format "%s+%d^%s" pl-label pl-offset pl-routine)))
   (if (= pl-offset 0)
@@ -291,6 +295,43 @@
              (message "Making completion list...%s" "done")))))
 
 
+(defun lkm-start-debugger ()
+  "Begins the default GT.M child process for debugging" 
+  (interactive)
+  (setq lkm-debug-window (split-window nil 20))
+  (get-buffer-create "Debug")
+  (set-window-buffer lkm-debug-window "Debug")
+  (setq buffer-saved (current-buffer))
+  (set-buffer "Debug")
+  (setq buffer-read-only t)
+  (set-buffer buffer-saved)
+  (setq gtm-dist (getenv "gtm_dist"))
+  (setq mcmd (format "%s%s" gtm-dist "/mumps"))
+  (start-process "debugger" "Debug" mcmd "-r" "^KBBMDBUG"))   
+
+(defun lkm-debug-routine ()
+  "Begins debug at current routine"
+  (interactive)
+  (setq debug-string (format "DO %s^%s\n" (lkm-parent-label-name) (lkm-current-routine)))
+  (process-send-string "debugger" debug-string))
+
+(defun lkm-set-breakpoint ()
+  "Sets a breakpoint at the current line"
+  (interactive)
+  (setq debug-string (format "ZBREAK %s\n" (lkm-current-label-offset-routine)))
+  (process-send-string "debugger" debug-string))
+
+(defun lkm-clear-breakpoint ()
+  "Clears a breakpoint at the current line"
+  (interactive)
+  (setq debug-string (format "ZBREAK -%s\n" (lkm-current-label-offset-routine)))
+  (process-send-string "debugger" debug-string))
+ 
+(defun lkm-clear-all-breakpoints ()
+  "Clears all breakpoints"
+  (interactive)
+  (setq debug-string (format "ZBREAK -*\n" (lkm-current-label-offset-routine)))
+  (process-send-string "debugger" debug-string))
 
 (define-derived-mode mumps-mode fundamental-mode
   "mumps mode"
@@ -381,7 +422,7 @@
   (global-set-key (kbd "<f6>") 'lkm-global-at-point)
   (global-set-key (kbd "<f7>") 'lkm-gtm-global-lookup)
   (global-set-key (kbd "<f8>") 'lkm-jump-to-routine-def)
-  (global-set-key (kbd "<f5>") 'lkm-complete-symbol)
+  (global-set-key (kbd "<f5>") 'lkm-debug-routine)
   (global-set-key (kbd "<f9>") 'lkm-gtm-compile)
   (global-set-key (kbd "(") 'lkm-routine-template)
   (global-set-key (kbd "\"") 'lkm-expand-quote)
@@ -409,9 +450,60 @@
 
   (define-key-after
     global-map
+    [menu-bar debug-menu]
+    (cons "Debug" (make-sparse-keymap "debug"))
+    'tools )
+
+  (define-key-after
+    global-map
     [menu-bar mumps-menu]
     (cons "MUMPS" (make-sparse-keymap "mumps"))
     'tools )
+
+  (define-key
+    global-map
+    [menu-bar debug-menu send-input]
+    '("Send Input to Process" . lkm-debug-routine))
+
+  (define-key
+    global-map
+    [menu-bar debug-menu step-over]
+    '("Step Over" . lkm-debug-routine))
+  
+  (define-key
+    global-map
+    [menu-bar debug-menu step-out]
+    '("Step Out" . lkm-debug-routine))  
+
+  (define-key
+    global-map
+    [menu-bar debug-menu step-into]
+    '("Step Into" . lkm-debug-routine))
+
+  (define-key
+    global-map
+    [menu-bar debug-menu start-debugger]
+    '("Clear All Breakpoints" . lkm-clear-all-breakpoints))    
+
+  (define-key
+    global-map
+    [menu-bar debug-menu clear-breakpoint]
+    '("Clear Breakpoint" . lkm-clear-breakpoint))
+  
+  (define-key
+    global-map
+    [menu-bar debug-menu set-breakpoint]
+    '("Set Breakpoint" . lkm-set-breakpoint))
+  
+  (define-key
+    global-map
+    [menu-bar debug-menu debug-routine]
+    '("Debug Current Routine" . lkm-debug-routine))
+
+  (define-key
+    global-map
+    [menu-bar debug-menu start-debugger]
+    '("Start Debugger" . lkm-start-debugger))   
     
   (define-key
     global-map
@@ -453,5 +545,6 @@
   (setq mo nil) 
 
   (setq mode-name "LorikeeM MUMPS Developer Tools")
+  ;(lkm-start-debugger)
   (run-hooks 'mumps-mode-hook)
 )
