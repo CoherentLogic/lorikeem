@@ -227,7 +227,7 @@
   (with-current-buffer (get-buffer-create "*MUMPS Global Examiner*")
     (goto-char (point-max))
     (insert "MUMPS Global Dump of " global "\n\n"))
-  (call-process "mumps" nil "*MUMPS Global Examiner*" nil "-r" "KBBMLRKM" global)
+  (call-process "mumps" nil "*MUMPS Global Examiner*" nil "-r" "KBAWDUMP" global)
   (display-buffer (get-buffer "*MUMPS Global Examiner*") t)
   (with-current-buffer (get-buffer-create "*MUMPS Global Examiner*")
     (goto-char (point-max))))
@@ -309,6 +309,12 @@
   (setq mcmd (format "%s%s" gtm-dist "/mumps"))
   (start-process "debugger" "Debug" mcmd "-r" "^KBBMDBUG"))   
 
+(defun lkm-stop-debugger ()
+  "Stops the debugger"
+  (interactive)
+  (setq debug-string "HALT\n")
+  (process-send-string "debugger" debug-string))
+
 (defun lkm-debug-routine ()
   "Begins debug at current routine"
   (interactive)
@@ -331,6 +337,36 @@
   "Clears all breakpoints"
   (interactive)
   (setq debug-string (format "ZBREAK -*\n" (lkm-current-label-offset-routine)))
+  (process-send-string "debugger" debug-string))
+
+(defun lkm-list-breakpoints ()
+  "Lists all breakpoints"
+  (interactive)
+  (setq debug-string "ZSHOW \"B\"\n")
+  (process-send-string "debugger" debug-string))
+
+(defun lkm-step-into ()
+  "Executes ZSTEP INTO"
+  (interactive)
+  (setq debug-string "ZSTEP INTO\n")
+  (process-send-string "debugger" debug-string))
+
+(defun lkm-step-over ()
+  "Executes ZSTEP OVER"
+  (interactive)
+  (setq debug-string "ZSTEP OVER\n")
+  (process-send-string "debugger" debug-string))
+
+(defun lkm-step-out ()
+  "Executes ZSTEP OUT"
+  (interactive)
+  (setq debug-string "ZSTEP OUT\n")
+  (process-send-string "debugger" debug-string))
+
+(defun lkm-immediate (value)
+  "Executes a line of MUMPS code or sends input to a pending MUMPS READ"
+  (interactive "sEnter MUMPS command or input for pending READ: ")
+  (setq debug-string (format "%s\n" value))
   (process-send-string "debugger" debug-string))
 
 (define-derived-mode mumps-mode fundamental-mode
@@ -463,26 +499,31 @@
   (define-key
     global-map
     [menu-bar debug-menu send-input]
-    '("Send Input to Process" . lkm-debug-routine))
+    '("Immediate" . lkm-immediate))
 
   (define-key
     global-map
     [menu-bar debug-menu step-over]
-    '("Step Over" . lkm-debug-routine))
+    '("Step Over" . lkm-step-over))
   
   (define-key
     global-map
     [menu-bar debug-menu step-out]
-    '("Step Out" . lkm-debug-routine))  
+    '("Step Out" . lkm-step-out))  
 
   (define-key
     global-map
     [menu-bar debug-menu step-into]
-    '("Step Into" . lkm-debug-routine))
+    '("Step Into" . lkm-step-into))
 
   (define-key
     global-map
-    [menu-bar debug-menu start-debugger]
+    [menu-bar debug-menu list-breakpoints]
+    '("List Breakpoints" . lkm-list-breakpoints))    
+  
+  (define-key
+    global-map
+    [menu-bar debug-menu clear-all-breakpoints]
     '("Clear All Breakpoints" . lkm-clear-all-breakpoints))    
 
   (define-key
@@ -499,6 +540,11 @@
     global-map
     [menu-bar debug-menu debug-routine]
     '("Debug Current Routine" . lkm-debug-routine))
+
+  (define-key
+    global-map
+    [menu-bar debug-menu stop-debugger]
+    '("Stop Debugger" . lkm-stop-debugger))    
 
   (define-key
     global-map
