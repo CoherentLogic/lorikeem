@@ -11,9 +11,9 @@
 ;; its use on any Cache-specific code.
 ;;
 ;; Written by John Willis
-;; john@coherent-logic.com
+;; <jwillis@coherent-logic.com>
 ;;
-;; Copyright (C) 2010, 2012 Coherent Logic Development LLC
+;; Copyright (C) 2010, 2012, 2013 Coherent Logic Development LLC
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU Affero General Public License (AGPL)
@@ -150,10 +150,7 @@
       (setq prev-char (char-to-string (char-before)))
       (if (string= prev-char "^") 
 	(lkm-gtm-global-lookup mm-current-word) 
-	(message "%s does not appear to be a MUMPS global." mm-current-word))
-      )    
-  )
-)
+	(message "%s does not appear to be a MUMPS global." mm-current-word)))))
 
 (defun lkm-is-line-label ()
   "Returns t if the current line is a label" 
@@ -313,6 +310,16 @@
   "Stops the debugger"
   (interactive)
   (setq debug-string "HALT\n")
+  (process-send-string "debugger" debug-string))
+
+(defun lkm-interrupt-debugger ()
+  "Interrupts the running process"
+  (interactive)
+  (interrupt-process "debugger"))
+
+(defun lkm-resume-debugger ()
+  (interactive)
+  (setq debug-string "ZCONTINUE\n")
   (process-send-string "debugger" debug-string))
 
 (defun lkm-debug-routine ()
@@ -535,6 +542,16 @@
     global-map
     [menu-bar debug-menu set-breakpoint]
     '("Set Breakpoint" . lkm-set-breakpoint))
+
+  (define-key
+    global-map
+    [menu-bar debug-menu resume-debugger]
+    '("Resume" . lkm-resume-debugger))
+
+  (define-key
+    global-map
+    [menu-bar debug-menu break-debugger]
+    '("Break" . lkm-interrupt-debugger))
   
   (define-key
     global-map
