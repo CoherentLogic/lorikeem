@@ -188,7 +188,8 @@
     (forward-line (- (lkm-parent-label-distance)))
     (setq label-line (thing-at-point 'line)))
   (string-match "^[%A-Za-z][A-Za-z0-9]*:?\\|^[0-9]+:?" label-line)
-  (setq label-line (substring label-line 0 (match-end 0))))
+  (setq label-line (substring label-line 0 (match-end 0)))
+  (replace-regexp-in-string "%" "%%" label-line))
 
 (defun lkm-print-parent-label-name ()
   "Print the parent label name"
@@ -196,9 +197,14 @@
   (message "The parent label is '%s'" (lkm-parent-label-name)))
 
 (defun lkm-current-routine ()
-  "Get the current routine"
-  (string-match "^[[:alnum:]]+" (buffer-name))
-  (setq pl-routine (substring (buffer-name) 0 (match-end 0))))
+  "Get the current routine" 
+  (setq pl-routine (file-name-sans-extension (buffer-name)))
+  (setq pl-routine (replace-regexp-in-string "_" "%%" pl-routine)))
+
+(defun lkm-print-current-routine ()
+  "Print the current routine"
+  (interactive)
+  (message "The current routine is '%s'" (lkm-current-routine)))
 
 (defun lkm-current-label-offset-routine ()
   "Get the current label+offset^routine"
