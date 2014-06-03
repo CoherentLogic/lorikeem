@@ -386,7 +386,7 @@
   "mumps mode"
   "LorikeeM MUMPS Developer Tools"
 
-  (setq lkm-version "0.99.5")
+  (setq lkm-version "0.99.6")
   (message "LorikeeM MUMPS Developer Tools %s" lkm-version)
 
   (add-hook 'shell-mode-hook
