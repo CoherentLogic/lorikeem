@@ -389,6 +389,9 @@
   (setq lkm-version "0.99.5")
   (message "LorikeeM MUMPS Developer Tools %s" lkm-version)
 
+  (add-hook 'shell-mode-hook
+	    'ansi-color-for-comint-mode-on)
+
   (setq frame-title-format "LorikeeM MUMPS Developer Tools")
 
   (set-variable 
