@@ -23,7 +23,7 @@ along with this program. If not, see http://www.gnu.org/licenses/.
 
 ###Installation###
 
-1) Download LorikeeM from [coherent-logic.com](http://www.coherent-logic.com/?page_id=8)
+1) Download LorikeeM from [coherent-logic.com](http://www.coherent-logic.com/cm/products/lorikeem)
 
 2) Extract the downloaded tar.gz file. This will create a *lorikeem* 
 subdirectory.
@@ -37,4 +37,4 @@ subdirectory.
 ###Credits###
 
 KBAWDUMP.m and mktags were written by DL Wicksell for his excellent 
-Axiom tools for the vim editor. https://bitbucket.org/dlw/axiom
+Axiom tools for the vim editor. https://github.com/dlwicksell/axiom
