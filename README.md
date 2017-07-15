@@ -6,7 +6,7 @@ LorikeeM MUMPS Developer Tools for Emacs
 This major mode for emacs provides basic syntax highlighting for MUMPS.
 It supports most features of Fidelity GT.M.
 
-###License###
+### License
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License (AGPL)
@@ -21,7 +21,7 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program. If not, see http://www.gnu.org/licenses/.
 
-###Installation###
+### Installation
 
 1) Download LorikeeM from [coherent-logic.com](http://www.coherent-logic.com/cm/products/lorikeem)
 
@@ -34,7 +34,7 @@ subdirectory.
 
 5) Follow the prompts
 
-###Credits###
+### Credits
 
 KBAWDUMP.m and mktags were written by DL Wicksell for his excellent 
 Axiom tools for the vim editor. https://github.com/dlwicksell/axiom
