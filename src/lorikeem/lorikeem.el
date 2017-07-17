@@ -11,9 +11,9 @@
 ;; its use on any Cache-specific code.
 ;;
 ;; Written by John Willis
-;; <jwillis@coherent-logic.com>
+;; <jpw@coherent-logic.com>
 ;;
-;; Copyright (C) 2010, 2012, 2013 Coherent Logic Development LLC
+;; Copyright (C) 2010, 2012, 2013, 2017 Coherent Logic Development LLC
 ;;
 ;; This program is free software: you can redistribute it and/or modify
 ;; it under the terms of the GNU Affero General Public License (AGPL)
@@ -410,7 +410,7 @@
   "mumps mode"
   "LorikeeM MUMPS Developer Tools"
 
-  (setq lkm-version "0.99.6")
+  (setq lkm-version "0.99.7")
   (message "LorikeeM MUMPS Developer Tools %s" lkm-version)
 
   (add-hook 'shell-mode-hook
