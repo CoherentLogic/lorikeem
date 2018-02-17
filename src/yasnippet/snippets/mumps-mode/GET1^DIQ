@@ -1,0 +1,1 @@
+${1:FILE},${2:IENS},${3:FIELD},"${4:FLAGS$(yas/choose-value '("I" "Z" "A#"))}",${5:TARGET_ROOT},${6:MSG_ROOT}

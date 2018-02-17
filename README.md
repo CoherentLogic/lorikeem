@@ -4,7 +4,7 @@ LorikeeM
 LorikeeM MUMPS Developer Tools for Emacs
 
 This major mode for emacs provides basic syntax highlighting for MUMPS.
-It supports most features of Fidelity GT.M.
+It supports most features of YottaDB and Fidelity GT.M.
 
 ### License
 

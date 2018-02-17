@@ -1,0 +1,1 @@
+${1:STRING},${2:ACTION$(yas/choose-value '("1" "-1"))}

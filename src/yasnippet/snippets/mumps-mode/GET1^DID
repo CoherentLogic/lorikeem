@@ -1,0 +1,1 @@
+${1:FILE},${2:FIELD},${3:FLAGS$(yas/choose-value '("Z"))},${4:ATTRIBUTE},${5:TARGET_ROOT},${6:MSG_ROOT}

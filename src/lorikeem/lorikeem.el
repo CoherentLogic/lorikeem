@@ -4,7 +4,7 @@
 ;;
 ;; Provides syntax highlighting and global dump for GNU Emacs
 ;;
-;; Note that I have concentrated mostly on GT.M syntax here. the
+;; Note that I have concentrated mostly on GT.M/YottaDB syntax here. the
 ;; list of keywords and functions comes from Edition 6.1 of 
 ;; Jon Diamond's "Standard M Pocket Guide." I have not left out
 ;; any InterSystems Cache-specific syntax, but have not tested
@@ -161,7 +161,7 @@
   (compile cmd-str nil))
 
 (defun lkm-global-at-point ()
- "Look up the GT.M global at the word under the current point."
+ "Look up the GT.M/YottaDB global at the word under the current point."
 
   (interactive)
   (let (mm-current-word)
@@ -247,7 +247,7 @@
   (message (lkm-current-label-offset-routine)))
 
 (defun lkm-gtm-global-lookup (global)
-  "Look up a global in GT.M"
+  "Look up a global in GT.M/YottaDB"
   (interactive "sWhat global would you like to look up? ")
   
   (get-buffer-create "*MUMPS Global Examiner*")
@@ -323,7 +323,7 @@
 
 
 (defun lkm-start-debugger ()
-  "Begins the default GT.M child process for debugging" 
+  "Begins the default GT.M/YottaDB child process for debugging" 
   (interactive)
   (setq lkm-debug-window (split-window nil 20))
   (get-buffer-create "Debug")
@@ -410,7 +410,7 @@
   "mumps mode"
   "LorikeeM MUMPS Developer Tools"
 
-  (setq lkm-version "0.99.7")
+  (setq lkm-version "0.99.8")
   (message "LorikeeM MUMPS Developer Tools %s" lkm-version)
 
   (add-hook 'shell-mode-hook

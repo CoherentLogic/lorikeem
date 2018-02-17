@@ -1,0 +1,1 @@
+${1:FILE},${2:IENS},${3:FIELD},"${4:FLAGS$(yas/choose-value '("E" "F" "H" "R" "U"))}",${5:VALUE},.${6:RESULT},${7:FDA_ROOT},${8:MSG_ROOT}

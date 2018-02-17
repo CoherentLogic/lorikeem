@@ -1,0 +1,1 @@
+${1:FILE},${2:FLAGS$(yas/choose-value '("N" "Z" "NZ"))},${3:ATTRIBUTES},${4:TARGET_ROOT},${5:MSG_ROOT}
