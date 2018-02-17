@@ -18,8 +18,8 @@ function welcome_message
     installer_text="${installer_text}\n\n"
     installer_text="${installer_text}This program will help you install "
     installer_text="${installer_text}LorikeeM onto your computer.\n\n"
-    installer_text="${installer_text}LorikeeM requires FIS GT.M and "
-    installer_text="${installer_text}GNU Emacs 23 or newer to function.\n"
+    installer_text="${installer_text}LorikeeM requires YottaDB 1.10 or FIS GT.M and "
+    installer_text="${installer_text}GNU Emacs 24 or newer to function.\n"
     installer_text="${installer_text}You appear to be running ${DISTRIB_ID}.\n\n"
     installer_text="${installer_text}Choose OK to continue."
 
