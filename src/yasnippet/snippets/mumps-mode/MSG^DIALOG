@@ -1,1 +1,0 @@
-"${1:FLAGS$(yas/choose-value '("A" "W" "S" "E" "H" "M" "B" "T"))}",.${2:OUTPUT_ARRAY},${3:TEXT_WIDTH},${4:LEFT_MARGIN},${5:INPUT_ROOT}
